@@ -8,7 +8,14 @@ import org.springframework.http.HttpStatus;
 @RequiredArgsConstructor
 public enum ErrorCode {
 
-    DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 사용 중인 아이디에요"),
+    NOT_VERIFICATION(HttpStatus.CONFLICT, "번호 인증이 안 된 사용자에요."),
+    EXIST_PHONE(HttpStatus.CONFLICT, "이미 인증이 된 번호에요."),
+    INCORRECT_CODE(HttpStatus.NOT_FOUND, "코드가 다릅니다."),
+    RETRY_VERIFICATION(HttpStatus.BAD_REQUEST, "번호 인증을 다시 해주세요."),
+    ALREADY_VERIFICATION(HttpStatus.ALREADY_REPORTED, "번호 인증을 이미 했습니다."),
+
+
+    EXIST_USERID(HttpStatus.CONFLICT, "이미 사용 중인 아이디에요"),
     INVALID_VERIFY_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 인증 토큰이에요"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저예요");
 

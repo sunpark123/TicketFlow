@@ -1,4 +1,4 @@
-package com.sunpark.ticketflow;
+package com.sunpark.ticketflow.ExceptionHandling;
 
 import com.sunpark.ticketflow.Enum.ErrorCode;
 import org.springframework.http.ResponseEntity;

@@ -1,4 +1,4 @@
-package com.sunpark.ticketflow;
+package com.sunpark.ticketflow.Config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

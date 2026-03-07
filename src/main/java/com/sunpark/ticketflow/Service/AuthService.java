@@ -1,6 +1,7 @@
 package com.sunpark.ticketflow.Service;
 
-import com.sunpark.ticketflow.CustomException;
+import com.sunpark.ticketflow.Entity.VerificationEntity;
+import com.sunpark.ticketflow.ExceptionHandling.CustomException;
 import com.sunpark.ticketflow.DTO.AuthDTO;
 import com.sunpark.ticketflow.Entity.UserEntity;
 import com.sunpark.ticketflow.Enum.ErrorCode;
@@ -16,11 +17,15 @@ import org.springframework.transaction.annotation.Transactional;
 public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final VerificationService verificationService;
 
     @Transactional
     public void registerUser(AuthDTO authDTO) {
+        if(!verificationService.checkVerificationByUserId(authDTO.getUserId(), authDTO.getPhone())){
+            throw new CustomException(ErrorCode.NOT_VERIFICATION);
+        }
         if(userRepository.existsByUserId(authDTO.getUserId())){
-            throw new CustomException(ErrorCode.DUPLICATE_EMAIL);
+            throw new CustomException(ErrorCode.EXIST_USERID);
         }
 
         String encodedPassword = passwordEncoder.encode(authDTO.getPassword());
@@ -34,5 +39,6 @@ public class AuthService {
                 .build();
 
         userRepository.save(userEntity);
+
     }
 }
