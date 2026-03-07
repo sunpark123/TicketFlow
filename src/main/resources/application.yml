@@ -1,0 +1,28 @@
+spring:
+  config:
+    import: optional:file:./.env[.properties]
+  application:
+    name: TicketFlow
+
+  # Database Setting
+  datasource:
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    url: ${DB_URL}
+    driver-class-name: org.mariadb.jdbc.Driver
+
+  # Jpa Setting
+  jpa:
+    database-platform: org.hibernate.dialect.MariaDBDialect
+    hibernate:
+      ddl-auto: update
+
+
+server:
+  port: 9090
+
+
+jwt:
+  secret:
+    access: ${JWT_ACCESS_SECRET}
+    refresh: ${JWT_REFRESH_SECRET}
