@@ -12,6 +12,8 @@ import java.util.Optional;
 @Repository
 public interface VerificationRepository extends JpaRepository<VerificationEntity, Integer>{
     boolean existsByUserIdAndPhoneAndVerifyTrue(String userId, String phone);
+    boolean existsByUserIdAndVerifyTrue(String userId);
+    boolean existsByPhoneAndVerifyTrue(String phone);
     Optional<VerificationEntity> findByUserId(String userId);
 
     @Query("""

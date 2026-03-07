@@ -21,7 +21,7 @@ public class AuthService {
 
     @Transactional
     public void registerUser(AuthDTO authDTO) {
-        if(!verificationService.checkVerificationByUserId(authDTO.getUserId(), authDTO.getPhone())){
+        if(!verificationService.checkVerification(authDTO.getUserId(), authDTO.getPhone())){
             throw new CustomException(ErrorCode.NOT_VERIFICATION);
         }
         if(userRepository.existsByUserId(authDTO.getUserId())){

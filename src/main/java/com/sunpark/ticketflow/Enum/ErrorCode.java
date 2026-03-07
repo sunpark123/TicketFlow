@@ -13,6 +13,7 @@ public enum ErrorCode {
     INCORRECT_CODE(HttpStatus.NOT_FOUND, "코드가 다릅니다."),
     RETRY_VERIFICATION(HttpStatus.BAD_REQUEST, "번호 인증을 다시 해주세요."),
     ALREADY_VERIFICATION(HttpStatus.ALREADY_REPORTED, "번호 인증을 이미 했습니다."),
+    ALREADY_USED_USERID_VERIFICATION(HttpStatus.ALREADY_REPORTED, "존재하는 아이디입니다."),
 
 
     EXIST_USERID(HttpStatus.CONFLICT, "이미 사용 중인 아이디에요"),

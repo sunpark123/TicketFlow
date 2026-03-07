@@ -20,13 +20,20 @@ public class VerificationService {
 
     @Transactional
     public void createVerification(VerificationDTO verificationDTO){
-        if(checkVerificationByUserId(verificationDTO.getUserId(), verificationDTO.getPhone())){
+        if(checkVerification(verificationDTO.getUserId(), verificationDTO.getPhone())){
             throw new CustomException(ErrorCode.ALREADY_VERIFICATION);
+        }
+        if(verificationRepository.existsByPhoneAndVerifyTrue(verificationDTO.getPhone())){
+            throw new CustomException(ErrorCode.ALREADY_VERIFICATION);
+        }
+        if(verificationRepository.existsByUserIdAndVerifyTrue(verificationDTO.getUserId())){
+            throw new CustomException(ErrorCode.ALREADY_USED_USERID_VERIFICATION);
         }
 
         VerificationEntity verification = verificationRepository
                 .findByUserId(verificationDTO.getUserId())
-                .orElseGet(() -> VerificationEntity.builder()
+                .orElseGet(() ->
+                        VerificationEntity.builder()
                         .userId(verificationDTO.getUserId())
                         .phone(verificationDTO.getPhone())
                         .build());
@@ -35,11 +42,12 @@ public class VerificationService {
 
         verification.setCode(String.valueOf(code));
         verification.setVerify(false);
+        verification.setPhone(verificationDTO.getPhone());
 
         verificationRepository.save(verification);
     }
 
-    public boolean checkVerificationByUserId(String userId, String phone){
+    public boolean checkVerification(String userId, String phone){
         return verificationRepository.existsByUserIdAndPhoneAndVerifyTrue(userId, phone);
     }
 
