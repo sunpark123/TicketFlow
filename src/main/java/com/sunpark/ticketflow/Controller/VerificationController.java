@@ -3,6 +3,7 @@ package com.sunpark.ticketflow.Controller;
 import com.sunpark.ticketflow.DTO.VerificationDTO;
 import com.sunpark.ticketflow.Entity.VerificationEntity;
 import com.sunpark.ticketflow.Service.VerificationService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,13 +19,13 @@ public class VerificationController {
     private final VerificationService verificationService;
 
     @PostMapping("/request")
-    public ResponseEntity<String> requestVerification(@RequestBody VerificationDTO verificationDTO){
+    public ResponseEntity<String> requestVerification(@RequestBody @Valid VerificationDTO verificationDTO){
         verificationService.createVerification(verificationDTO);
         return new ResponseEntity<>("Verification has been created", HttpStatus.OK);
     }
 
     @PostMapping("/verify")
-    public ResponseEntity<String> verifyVerification(@RequestBody VerificationDTO verificationDTO){
+    public ResponseEntity<String> verifyVerification(@RequestBody @Valid VerificationDTO verificationDTO){
         verificationService.verify(
                 verificationDTO.getUserId(),
                 verificationDTO.getPhone(),

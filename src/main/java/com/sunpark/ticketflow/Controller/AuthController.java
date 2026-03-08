@@ -1,9 +1,13 @@
 package com.sunpark.ticketflow.Controller;
 
 import com.sunpark.ticketflow.DTO.AuthDTO;
+import com.sunpark.ticketflow.DTO.LoginDTO;
 import com.sunpark.ticketflow.Service.AuthService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,8 +21,25 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody @Valid AuthDTO authDTO) {
+    public ResponseEntity<String> registerUser(@RequestBody @Valid AuthDTO authDTO) {
         authService.registerUser(authDTO);
-        return ResponseEntity.ok().build();
+        return new ResponseEntity<>("Success Register", HttpStatus.OK);
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<String> loginUser(@RequestBody @Valid LoginDTO loginDTO) {
+        String accessToken = authService.loginUser(loginDTO);
+
+        ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
+                .maxAge(3600)
+                .path("/")
+                .httpOnly(true)
+                .secure(true)
+                .build();
+
+
+        return ResponseEntity.ok()
+                .header(HttpHeaders.SET_COOKIE, cookie.toString())
+                .body("Success Login");
     }
 }

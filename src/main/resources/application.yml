@@ -17,6 +17,12 @@ spring:
     hibernate:
       ddl-auto: update
 
+  # redis Setting
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
 
 server:
   port: 9090
@@ -26,3 +32,4 @@ jwt:
   secret:
     access: ${JWT_ACCESS_SECRET}
     refresh: ${JWT_REFRESH_SECRET}
+

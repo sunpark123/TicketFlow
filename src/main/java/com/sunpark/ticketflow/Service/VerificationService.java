@@ -47,6 +47,7 @@ public class VerificationService {
         verificationRepository.save(verification);
     }
 
+    @Transactional(readOnly = true)
     public boolean checkVerification(String userId, String phone){
         return verificationRepository.existsByUserIdAndPhoneAndVerifyTrue(userId, phone);
     }

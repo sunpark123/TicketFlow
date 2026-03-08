@@ -18,7 +18,9 @@ public enum ErrorCode {
 
     EXIST_USERID(HttpStatus.CONFLICT, "이미 사용 중인 아이디에요"),
     INVALID_VERIFY_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 인증 토큰이에요"),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저예요");
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저예요"),
+
+    INCORRECT_LOGIN(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 다릅니다.");
 
     private final HttpStatus status;
     private final String message;
