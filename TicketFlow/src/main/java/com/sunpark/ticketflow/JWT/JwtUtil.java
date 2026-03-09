@@ -57,14 +57,6 @@ public class JwtUtil {
 
 
 
-    public boolean validateAccessToken(String token) {
-        try {
-            getAccessClaims(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
-    }
     public boolean validateRefreshToken(String token) {
         try {
             getRefreshClaims(token);
@@ -75,25 +67,12 @@ public class JwtUtil {
     }
 
 
-    public String extractAccessUserId(String token) {
-
-        return getAccessClaims(token).getSubject();
-    }
     public String extractRefreshUserId(String token) {
 
         return getRefreshClaims(token).getSubject();
     }
 
 
-
-    private Claims getAccessClaims(String token) {
-
-        return Jwts.parserBuilder()
-                .setSigningKey(getAccessKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-    }
     private Claims getRefreshClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getRefreshKey())
