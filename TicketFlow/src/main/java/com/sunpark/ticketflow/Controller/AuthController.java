@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
@@ -27,10 +29,10 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> loginUser(@RequestBody @Valid LoginDTO loginDTO) {
-        String accessToken = authService.loginUser(loginDTO);
+    public ResponseEntity<Map<String, String>> loginUser(@RequestBody @Valid LoginDTO loginDTO) {
+        Map<String, String> tokenMap = authService.loginUser(loginDTO);
 
-        ResponseCookie cookie = ResponseCookie.from("accessToken", accessToken)
+        ResponseCookie cookie = ResponseCookie.from("refreshToken", tokenMap.get("refreshToken"))
                 .maxAge(3600)
                 .path("/")
                 .httpOnly(true)
@@ -40,6 +42,6 @@ public class AuthController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                .body("Success Login");
+                .body(Map.of("accessToken", tokenMap.get("accessToken")));
     }
 }

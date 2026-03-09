@@ -10,12 +10,15 @@ import com.sunpark.ticketflow.Enum.UserRole;
 import com.sunpark.ticketflow.JWT.JwtUtil;
 import com.sunpark.ticketflow.Repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.antlr.v4.runtime.Token;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -24,8 +27,8 @@ public class AuthService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final VerificationService verificationService;
-    private final JwtUtil jwtUtil;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final TokenService tokenService;
+
 
     public void registerUser(AuthDTO authDTO) {
         if(!verificationService.checkVerification(authDTO.getUserId(), authDTO.getPhone())){
@@ -48,7 +51,7 @@ public class AuthService {
         userRepository.save(userEntity);
     }
 
-    public String loginUser(LoginDTO loginDTO) {
+    public Map<String, String> loginUser(LoginDTO loginDTO) {
         String userId = loginDTO.getUserId();
 
         UserEntity userEntity = userRepository.findByUserId(userId);
@@ -61,15 +64,8 @@ public class AuthService {
         }
 
 
-        String refreshToken = jwtUtil.generateRefreshToken(userId);
 
-        redisTemplate.opsForValue().set(
-                "refreshToken:" + userId,
-                refreshToken,
-                Duration.ofDays(7)
-        );
-
-        return jwtUtil.generateAccessToken(userId);
+        return tokenService.getNewToken(userId);
 
 
     }
