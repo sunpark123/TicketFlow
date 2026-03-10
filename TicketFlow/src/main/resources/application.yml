@@ -33,3 +33,5 @@ jwt:
     access: ${JWT_ACCESS_SECRET}
     refresh: ${JWT_REFRESH_SECRET}
 
+gateway:
+  secret: ${GATEWAY_SECRET}

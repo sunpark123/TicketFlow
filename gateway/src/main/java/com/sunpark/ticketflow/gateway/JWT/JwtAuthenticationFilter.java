@@ -1,6 +1,7 @@
 package com.sunpark.ticketflow.gateway.JWT;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.ReactiveSecurityContextHolder;
@@ -18,6 +19,8 @@ import java.util.Collections;
 public class JwtAuthenticationFilter implements WebFilter {
     private final JwtUtil jwtUtil;
 
+    @Value("${gateway.secret}")
+    private String gatewaySecret;
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
@@ -31,7 +34,9 @@ public class JwtAuthenticationFilter implements WebFilter {
                 path.startsWith("/token/get/access")
             )
         {
-            return chain.filter(exchange);
+            return chain.filter(exchange.mutate().request(r -> r
+                            .header("X-Gateway-Secret", gatewaySecret)
+                    ).build());
         }
 
 
@@ -48,10 +53,11 @@ public class JwtAuthenticationFilter implements WebFilter {
                         username, null, Collections.emptyList());
 
                 // 2. 헤더 변조 및 SecurityContext 적용
-                return chain.filter(exchange.mutate()
-                                .request(r -> r.header("X-User-Id", username))
-                                .build())
-                        .contextWrite(ReactiveSecurityContextHolder.withAuthentication(auth));
+                return chain.filter(exchange.mutate().request(r -> r
+                            .header("X-User-Id", username)
+                            .header("X-Gateway-Secret", gatewaySecret)
+                        ).build())
+                .contextWrite(ReactiveSecurityContextHolder.withAuthentication(auth));
             }
         }
 
