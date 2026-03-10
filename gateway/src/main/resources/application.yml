@@ -7,7 +7,7 @@ spring:
     gateway:
       routes:
         - id: Ticket-Flow
-          uri: http://localhost:9090
+          uri: ${TICKETFLOW_ROUTE_URL}
           predicates:
             - Path=/**
 
