@@ -1,4 +1,4 @@
-package com.sunpark.ticketflow.Enum;
+package com.sunpark.ticketflow.gateway.Enum;
 
 public enum UserRole {
     USER,

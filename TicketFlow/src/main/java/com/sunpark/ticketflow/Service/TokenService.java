@@ -1,6 +1,7 @@
 package com.sunpark.ticketflow.Service;
 
 
+import com.sunpark.ticketflow.Enum.UserRole;
 import com.sunpark.ticketflow.JWT.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,9 +19,9 @@ public class TokenService {
     private final RedisTemplate<String, String> redisTemplate;
 
 
-    public Map<String, String> getNewToken(String userId){
-        String accessToken = jwtUtil.generateAccessToken(userId);
-        String refreshToken = jwtUtil.generateRefreshToken(userId);
+    public Map<String, String> getNewToken(String userId, UserRole userRole) {
+        String accessToken = jwtUtil.generateAccessToken(userId, userRole);
+        String refreshToken = jwtUtil.generateRefreshToken(userId, userRole);
 
         redisTemplate.opsForValue().set(
                 "refreshToken:" + userId,

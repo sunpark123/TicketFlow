@@ -28,6 +28,7 @@ public class UserEntity {
 
     private String phone;
 
+    @Enumerated(EnumType.STRING)
     private UserRole role;
 
     private LocalDateTime created_at;

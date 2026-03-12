@@ -1,6 +1,7 @@
 package com.sunpark.ticketflow.gateway.JWT;
 
 
+import com.sunpark.ticketflow.gateway.Enum.UserRole;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
@@ -36,8 +37,11 @@ public class JwtUtil {
         return getAccessClaims(token).getSubject();
     }
 
-    private Claims getAccessClaims(String token) {
+    public UserRole extractAccessRole(String token) {
+        return UserRole.valueOf(getAccessClaims(token).get("role", String.class));
+    }
 
+    private Claims getAccessClaims(String token) {
         return Jwts.parserBuilder()
                 .setSigningKey(getAccessKey())
                 .build()

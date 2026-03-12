@@ -1,5 +1,6 @@
 package com.sunpark.ticketflow.gateway.JWT;
 
+import com.sunpark.ticketflow.gateway.Enum.UserRole;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -47,6 +48,7 @@ public class JwtAuthenticationFilter implements WebFilter {
 
             if (jwtUtil.validateAccessToken(token)) {
                 String username = jwtUtil.extractAccessUserId(token);
+                UserRole userRole = jwtUtil.extractAccessRole(token);
 
                 // 1. SecurityContext에 인증 정보 등록 (비동기 방식)
                 Authentication auth = new UsernamePasswordAuthenticationToken(
@@ -55,6 +57,7 @@ public class JwtAuthenticationFilter implements WebFilter {
                 // 2. 헤더 변조 및 SecurityContext 적용
                 return chain.filter(exchange.mutate().request(r -> r
                             .header("X-User-Id", username)
+                            .header("X-User-Role", String.valueOf(userRole))
                             .header("X-Gateway-Secret", gatewaySecret)
                         ).build())
                 .contextWrite(ReactiveSecurityContextHolder.withAuthentication(auth));

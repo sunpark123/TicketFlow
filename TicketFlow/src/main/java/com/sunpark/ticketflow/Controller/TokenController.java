@@ -1,6 +1,7 @@
 package com.sunpark.ticketflow.Controller;
 
 import com.sunpark.ticketflow.Enum.ErrorCode;
+import com.sunpark.ticketflow.Enum.UserRole;
 import com.sunpark.ticketflow.ExceptionHandling.CustomException;
 import com.sunpark.ticketflow.JWT.JwtUtil;
 import com.sunpark.ticketflow.Service.TokenService;
@@ -32,8 +33,9 @@ public class TokenController {
 
 
         String userId = jwtUtil.extractRefreshUserId(refreshToken);
+        UserRole userRole = jwtUtil.extractRefreshRole(refreshToken);
 
-        Map<String, String> tokenMap = tokenService.getNewToken(userId);
+        Map<String, String> tokenMap = tokenService.getNewToken(userId, userRole);
 
         String newAccessToken = tokenMap.get("accessToken");
         String newRefreshToken = tokenMap.get("refreshToken");

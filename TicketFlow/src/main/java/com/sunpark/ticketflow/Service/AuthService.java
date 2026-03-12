@@ -44,8 +44,7 @@ public class AuthService {
                 .password(encodedPassword)
                 .name(authDTO.getName())
                 .phone(authDTO.getPhone())
-                .role(UserRole.user)
-
+                .role(UserRole.USER)
                 .build();
 
         userRepository.save(userEntity);
@@ -63,10 +62,6 @@ public class AuthService {
             throw new CustomException(ErrorCode.INCORRECT_LOGIN);
         }
 
-
-
-        return tokenService.getNewToken(userId);
-
-
+        return tokenService.getNewToken(userId, userEntity.getRole());
     }
 }
