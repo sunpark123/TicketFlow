@@ -23,17 +23,13 @@ MariaDB,
 Redis, 
 Docker
 
-## 4. 시스템 아키텍처
-**-- 범례**
-## <img width="562" height="155" alt="아키텍처 범례" src="https://github.com/user-attachments/assets/4c01d5c9-f195-452b-bf9d-d3a052595283" />
-
-
-**-- Auth Controller 아키텍처**
-## <img width="755" height="448" alt="{76935EFB-2364-48C0-A9A6-2EABEF3FE906}" src="https://github.com/user-attachments/assets/57c4f520-5f7f-4d32-8baa-46c519cc98ea" />
-
+## 4. 시퀸스 아키텍처
+회원가입 요청
+<img width="922" height="779" alt="{96A99577-9C71-43A6-8303-7B642ADAACFA}" src="https://github.com/user-attachments/assets/709c04c9-603d-40f4-86bb-20fddd1265b9" />
 
 ## 5. ERD
 <img width="1103" height="382" alt="{5023DE92-B6C8-486D-8821-2267EE8D82E4}" src="https://github.com/user-attachments/assets/7d4a9788-30ed-4f1e-8111-1e8bd865cbbf" />
+
 
 ## 6. API 명세
 
