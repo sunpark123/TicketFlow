@@ -56,10 +56,10 @@ public class AuthService {
         UserEntity userEntity = userRepository.findByUserId(userId);
 
         if(userEntity == null){
-            throw new CustomException(ErrorCode.INCORRECT_LOGIN);
+            throw new CustomException(ErrorCode.UNAVAILABLE_USER);
         }
         if(!passwordEncoder.matches(loginDTO.getPassword(), userEntity.getPassword())){
-            throw new CustomException(ErrorCode.INCORRECT_LOGIN);
+            throw new CustomException(ErrorCode.INCORRECT_INPUT);
         }
 
         return tokenService.getNewToken(userId, userEntity.getRole());

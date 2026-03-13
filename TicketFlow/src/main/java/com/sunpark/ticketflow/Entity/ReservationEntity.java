@@ -7,12 +7,14 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "seats")
-public class SeatsEntity {
+@Table(name = "reservation_seat")
+public class ReservationEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -26,10 +28,13 @@ public class SeatsEntity {
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
 
+    private LocalDateTime reservation_at;
+
     @Builder
-    public SeatsEntity(Integer eventId, Integer seatNumber, SeatStatus status) {
+    public ReservationEntity(Integer eventId, Integer seatNumber, SeatStatus status) {
         this.eventId = eventId;
         this.seatNumber = seatNumber;
         this.status = status;
+        this.reservation_at = LocalDateTime.now();
     }
 }

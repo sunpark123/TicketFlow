@@ -20,13 +20,17 @@ public enum ErrorCode {
     INVALID_VERIFY_TOKEN(HttpStatus.BAD_REQUEST, "유효하지 않은 인증 토큰이에요"),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 유저예요"),
 
-    INCORRECT_LOGIN(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 다릅니다."),
+    INCORRECT_INPUT(HttpStatus.UNAUTHORIZED, "아이디 또는 비밀번호가 다릅니다."),
+    UNAVAILABLE_USER(HttpStatus.NOT_FOUND, "존재하지 않는 유저입니다."),
 
     INVALID_TOKEN(HttpStatus.UNAUTHORIZED, "토큰이 유효하지 않습니다."),
 
     ACCESS_DENIED(HttpStatus.UNAUTHORIZED, "권한이 없습니다."),
     
-    NOT_FOUND_EVENT(HttpStatus.NOT_FOUND, "이벤트가 없습니다.");
+    NOT_FOUND_EVENT(HttpStatus.NOT_FOUND, "이벤트가 없습니다."),
+
+    ALREADY_RESERVATION(HttpStatus.ALREADY_REPORTED, "이미 선점된 좌석입니다"),
+    NOT_FOUND_SEAT(HttpStatus.NOT_FOUND, "없는 좌석입니다.");
 
     private final HttpStatus status;
     private final String message;

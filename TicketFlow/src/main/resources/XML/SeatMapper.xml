@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="com.sunpark.ticketflow.Mapper.SeatsMapper">
+    <insert id="bulkInsert" parameterType="java.util.List" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO seats (event_id, seat_number, status)
+        VALUES
+        <foreach collection="list" item="seat" separator=",">
+            (#{seat.eventId}, #{seat.seatNumber}, #{seat.status})
+        </foreach>
+    </insert>
+</mapper>

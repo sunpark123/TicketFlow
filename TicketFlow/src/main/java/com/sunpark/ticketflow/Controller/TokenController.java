@@ -21,21 +21,16 @@ import java.util.Map;
 @RequestMapping("/token")
 @RequiredArgsConstructor
 public class TokenController {
-    private final JwtUtil jwtUtil;
     private final TokenService tokenService;
 
     @PostMapping("/get/access")
     public ResponseEntity<Map<String, String>> getAccessToken(@CookieValue(name = "refreshToken", required = false) String refreshToken) {
-        boolean tokenValid = jwtUtil.validateRefreshToken(refreshToken);
-        if (!tokenValid) {
-           throw new CustomException(ErrorCode.INVALID_TOKEN);
-        }
+        Map<String, String> userInfoMap = tokenService.validRefreshToken(refreshToken);
 
-
-        String userId = jwtUtil.extractRefreshUserId(refreshToken);
-        UserRole userRole = jwtUtil.extractRefreshRole(refreshToken);
-
-        Map<String, String> tokenMap = tokenService.getNewToken(userId, userRole);
+        Map<String, String> tokenMap = tokenService.getNewToken(
+                userInfoMap.get("userId"),
+                UserRole.valueOf(userInfoMap.get("userRole"))
+        );
 
         String newAccessToken = tokenMap.get("accessToken");
         String newRefreshToken = tokenMap.get("refreshToken");
@@ -47,7 +42,6 @@ public class TokenController {
                 .httpOnly(true)
                 .secure(true)
                 .build();
-
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.SET_COOKIE, cookie.toString())

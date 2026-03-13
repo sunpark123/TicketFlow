@@ -37,7 +37,8 @@ gateway:
   secret: ${GATEWAY_SECRET}
 
 
-logging:
-  level:
-    org.hibernate.SQL: debug
-    org.hibernate.type.descriptor.sql: trace
+mybatis:
+  mapper-locations: classpath:XML/**/*.xml
+  type-aliases-package: com.sunpark.ticketflow
+  configuration:
+    map-underscore-to-camel-case: true

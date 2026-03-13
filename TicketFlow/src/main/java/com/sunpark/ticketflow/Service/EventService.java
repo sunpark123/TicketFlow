@@ -8,7 +8,6 @@ import com.sunpark.ticketflow.Enum.EventStatus;
 import com.sunpark.ticketflow.ExceptionHandling.CustomException;
 import com.sunpark.ticketflow.Repository.EventRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +19,7 @@ import java.util.Optional;
 @Transactional
 public class EventService {
     private final EventRepository eventRepository;
+    private final SeatsService seatsService;
 
 
     public List<EventEntity> getEvents() {
@@ -46,6 +46,13 @@ public class EventService {
                 .booking_end_at(eventDTO.getBooking_end_at())
                 .build();
 
-        eventRepository.save(eventEntity);
+        EventEntity event = eventRepository.save(eventEntity);
+
+        seatsService.bulkCreateSeats(event.getId());
+    }
+
+    public void getEventOrThrow(Integer eventId) {
+        eventRepository.findById(eventId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EVENT));
     }
 }
