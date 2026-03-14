@@ -4,22 +4,22 @@ import com.sunpark.ticketflow.Entity.SeatsEntity;
 import com.sunpark.ticketflow.Enum.ErrorCode;
 import com.sunpark.ticketflow.Enum.SeatStatus;
 import com.sunpark.ticketflow.ExceptionHandling.CustomException;
-import com.sunpark.ticketflow.Mapper.SeatsMapper;
+import com.sunpark.ticketflow.DAO.SeatsDAO;
 import com.sunpark.ticketflow.Repository.SeatsRepository;
 import lombok.RequiredArgsConstructor;
-import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class SeatsService {
     private final SeatsRepository seatsRepository;
-    private final SeatsMapper seatsMapper;
+    private final SeatsDAO seatsDAO;
 
 
     public List<SeatsEntity> getSeatsByEventId(Integer eventId) {
@@ -37,12 +37,11 @@ public class SeatsService {
                     .build()
             );
         }
-        seatsMapper.bulkInsert(seatsEntityList);
+        seatsDAO.bulkInsert(seatsEntityList);
     }
 
-    public SeatsEntity getSeatOrThrow(Integer seatNumber) {
-        return seatsRepository.findBySeatNumber(seatNumber)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_SEAT));
+    public SeatsEntity getSeat(Integer seatNumber) {
+        return seatsRepository.findBySeatNumber(seatNumber).orElse(null);
     }
 
     public void save(SeatsEntity seatsEntity) {

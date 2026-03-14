@@ -25,15 +25,19 @@ public class ReservationEntity {
     @Column(name = "seat_number")
     private Integer seatNumber;
 
+    @Column(name = "user_id")
+    private String userId;
+
     @Enumerated(EnumType.STRING)
     private SeatStatus status;
 
     private LocalDateTime reservation_at;
 
     @Builder
-    public ReservationEntity(Integer eventId, Integer seatNumber, SeatStatus status) {
+    public ReservationEntity(Integer eventId, Integer seatNumber, String userId, SeatStatus status) {
         this.eventId = eventId;
         this.seatNumber = seatNumber;
+        this.userId = userId;
         this.status = status;
         this.reservation_at = LocalDateTime.now();
     }

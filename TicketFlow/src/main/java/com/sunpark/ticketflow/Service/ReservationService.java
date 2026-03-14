@@ -1,7 +1,10 @@
 package com.sunpark.ticketflow.Service;
 
 
+import com.sunpark.ticketflow.DAO.ReservationDAO;
+import com.sunpark.ticketflow.DAO.SeatsDAO;
 import com.sunpark.ticketflow.DTO.EventDTO;
+import com.sunpark.ticketflow.DTO.ReservationDTO;
 import com.sunpark.ticketflow.Entity.EventEntity;
 import com.sunpark.ticketflow.Entity.ReservationEntity;
 import com.sunpark.ticketflow.Entity.SeatsEntity;
@@ -26,6 +29,8 @@ public class ReservationService {
     private final RedisService redisService;
     private final SeatsService seatsService;
     private final EventService eventService;
+    private final ReservationDAO reservationDAO;
+    private final SeatsDAO seatsDAO;
 
     public ReservationEntity reservationTry(Integer eventId, Integer seatNumber, String userId) {
         boolean locked = redisService.reservationTry(
@@ -37,8 +42,18 @@ public class ReservationService {
             throw new CustomException(ErrorCode.ALREADY_RESERVATION);
         }
 
-        eventService.getEventOrThrow(eventId);
-        SeatsEntity seatEntity = seatsService.getSeatOrThrow(seatNumber);
+        EventEntity event = eventService.getEvent(eventId);
+        if(event == null) {
+            redisService.deleteReservation(eventId, seatNumber);
+            throw new CustomException(ErrorCode.NOT_FOUND_EVENT);
+        }
+
+
+        SeatsEntity seatEntity = seatsService.getSeat(seatNumber);
+        if(seatEntity == null){
+            redisService.deleteReservation(eventId, seatNumber);
+            throw new CustomException(ErrorCode.NOT_FOUND_SEAT);
+        }
         if(!seatEntity.getStatus().equals(SeatStatus.AVAILABLE)) {
             throw new CustomException(ErrorCode.ALREADY_RESERVATION);
         }
@@ -46,6 +61,7 @@ public class ReservationService {
         ReservationEntity reservationEntity = ReservationEntity.builder()
                 .eventId(eventId)
                 .seatNumber(seatNumber)
+                .userId(userId)
                 .status(SeatStatus.WAITING)
                 .build();
 
@@ -55,4 +71,16 @@ public class ReservationService {
         return reservationRepository.save(reservationEntity);
     }
 
+
+    public void reservationConfirm(ReservationDTO reservationDTO) {
+        int result = reservationDAO.reservationConfirm(reservationDTO);
+        if(result == 1){
+            seatsDAO.seatConfirm(reservationDTO);
+            redisService.deleteReservation(reservationDTO.getEventId(), reservationDTO.getSeatNumber());
+        }
+        else{
+            throw new CustomException(ErrorCode.EXIST_USERID);
+        }
+
+    }
 }

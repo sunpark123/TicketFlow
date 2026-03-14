@@ -15,5 +15,7 @@ public class ReservationDTO {
     private Integer eventId;
 
     @NotNull(message = "좌석 아이디 입력을 해주세요")
-    private Integer seatId;
+    private Integer seatNumber;
+
+    private String userId;
 }

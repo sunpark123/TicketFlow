@@ -21,9 +21,15 @@ public class RedisService {
         );
     }
 
-    public boolean reservationTry(Integer eventId, Integer seatId, String userId) {
+    public boolean reservationTry(Integer eventId, Integer seatNumber, String userId) {
         Boolean result = redisTemplate.opsForValue()
-                .setIfAbsent("reservation:" + eventId + ":" + seatId, userId, 300, TimeUnit.SECONDS);
+                .setIfAbsent("reservation:" + eventId + ":" + seatNumber, userId, 300, TimeUnit.SECONDS);
         return Boolean.TRUE.equals(result);
+    }
+
+    public void deleteReservation(Integer eventId, Integer seatNumber) {
+        redisTemplate.delete(
+                "reservation:" + eventId + ":" + seatNumber);
+
     }
 }

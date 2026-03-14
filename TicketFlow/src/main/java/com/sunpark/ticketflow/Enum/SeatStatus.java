@@ -4,5 +4,6 @@ public enum SeatStatus {
     AVAILABLE,
     WAITING,
     UNAVAILABLE,
+    CONFIRMED,
     CLOSED
 }

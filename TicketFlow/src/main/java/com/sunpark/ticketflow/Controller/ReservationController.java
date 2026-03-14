@@ -22,14 +22,20 @@ public class ReservationController {
     private final ReservationService reservationService;
 
     @PostMapping("/select")
-    public ResponseEntity<?> selectSeats(@Valid @RequestBody ReservationDTO reservationDTO, @RequestHeader("X-User-Id") String userId) throws Exception {
+    public ResponseEntity<?> selectSeats(@Valid @RequestBody ReservationDTO reservationDTO, @RequestHeader("X-User-Id") String userId) {
         Integer eventId = reservationDTO.getEventId();
-        Integer seatId = reservationDTO.getSeatId();
+        Integer seatId = reservationDTO.getSeatNumber();
 
         ReservationEntity reservationEntity = reservationService.reservationTry(eventId, seatId, userId);
 
-
-
         return ResponseEntity.ok("예약 성공!! : " + reservationEntity.getEventId() + " " + reservationEntity.getSeatNumber());
+    }
+
+    @PostMapping("/confirm")
+    public ResponseEntity<?> confirmSeat(@Valid @RequestBody ReservationDTO reservationDTO, @RequestHeader("X-User-Id") String userId) {
+        reservationDTO.setUserId(userId);
+        reservationService.reservationConfirm(reservationDTO);
+
+        return ResponseEntity.ok("good");
     }
 }

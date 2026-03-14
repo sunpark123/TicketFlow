@@ -51,8 +51,8 @@ public class EventService {
         seatsService.bulkCreateSeats(event.getId());
     }
 
-    public void getEventOrThrow(Integer eventId) {
-        eventRepository.findById(eventId)
-                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND_EVENT));
+    public EventEntity getEvent(Integer eventId) {
+        return eventRepository.findById(eventId).orElse(null);
     }
+
 }
